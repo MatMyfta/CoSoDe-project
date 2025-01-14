@@ -1,0 +1,58 @@
+version: "3.9"
+
+services: 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  apartments: 
+    build: ./apartments 
+    ports:
+      - "5001:5000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./apartments/data/:/home/data/
+
+  booking:
+    build: ./booking
+    ports:
+      - "5002:5000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+      - apartments
+    volumes:
+      - ./booking/data/:/home/data/
+
+  search:
+    build: ./search
+    ports:
+      - "5003:5000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+      - apartments
+      - booking
+    volumes:
+      - ./search/data/:/home/data/
+
+  api_gateway:
+    build:
+      context: ./api_gateway
+    ports:
+      - "8080:5000"
+    depends_on:
+      - apartments
+      - booking
+      - search
