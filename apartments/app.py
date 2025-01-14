@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify # type: ignore
 from utils.database import init_db, add_apartment_to_db, remove_apartment_from_db, list_apartments_from_db
 from utils.rabbitmq import publish_message
 import sqlite3

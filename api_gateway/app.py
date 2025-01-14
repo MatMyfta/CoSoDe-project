@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
-import requests
+from flask import Flask, request, jsonify # type: ignore
+import requests # type: ignore
 
 app = Flask(__name__)
 

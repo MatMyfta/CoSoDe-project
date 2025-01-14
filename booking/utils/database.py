@@ -1,6 +1,6 @@
-import os
+import requests # type: ignore
 import sqlite3
-import requests
+import os
 
 
 DATABASE = './data/bookings.db'

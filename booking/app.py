@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify # type: ignore
 import threading
 import uuid
 from utils.rabbitmq import publish_message, listen_for_messages

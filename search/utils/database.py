@@ -1,5 +1,5 @@
 
-import requests
+import requests # type: ignore
 import os
 import sqlite3
 

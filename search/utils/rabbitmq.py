@@ -1,4 +1,4 @@
-import pika
+import pika # type: ignore
 import os
 import json
 import time

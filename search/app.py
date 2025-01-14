@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify # type: ignore
 import threading
 from utils.database import init_db, search_apartments_in_db
 from utils.rabbitmq import listen_for_messages
