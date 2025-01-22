@@ -22,17 +22,13 @@ def init_db():
         ''')
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS apartments (
-                id TEXT PRIMARY KEY,
-                name TEXT NOT NULL,
-                address TEXT NOT NULL,
-                noise_level REAL NOT NULL,
-                floor INTEGER NOT NULL
+                id TEXT PRIMARY KEY
             )
         ''')
         conn.commit()
         conn.close()
 
-        initialize_apartments()
+    initialize_apartments()
 
 
 def initialize_apartments():
@@ -50,9 +46,9 @@ def initialize_apartments():
 
             for row in apartments:
                 cursor.execute('''
-                    INSERT OR REPLACE INTO apartments (id, name, address, noise_level, floor)
-                    VALUES (?, ?, ?, ?, ?)
-                ''', (row['id'], row['name'], row['address'], row['noise_level'], row['floor']))
+                    INSERT OR REPLACE INTO apartments (id)
+                    VALUES (?)
+                ''', (row['id'],))
 
             conn.commit()
             print("Apartments initialized successfully.")
@@ -80,13 +76,13 @@ def is_apartment_available(apartment_id, new_start_date, new_end_date, booking_i
     return overlapping_booking is None
 
 
-def add_apartment_to_db(apartment_id, name, address, noise_level, floor):
+def add_apartment_to_db(apartment_id):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO apartments (id, name, address, noise_level, floor)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (apartment_id, name, address, noise_level, floor))
+        INSERT INTO apartments (id)
+        VALUES (?)
+    ''', (apartment_id))
     conn.commit()
     conn.close()
 

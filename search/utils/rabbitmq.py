@@ -31,9 +31,8 @@ def handle_booking_event(event_type, data):
         booking_apartment_id = data.get('apartment_id')
         booking_start_date = data.get('start_date')
         booking_end_date = data.get('end_date')
-        booking_guest_name = data.get('guest_name')
         
-        add_booking_to_db(booking_id, booking_apartment_id, booking_start_date, booking_end_date, booking_guest_name)
+        add_booking_to_db(booking_id, booking_apartment_id, booking_start_date, booking_end_date)
         
         print(f"Booking added for apartment {booking_apartment_id}.")
 

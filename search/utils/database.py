@@ -47,9 +47,9 @@ def initialize_bookings(conn):
 
             for row in bookings:
                 cursor.execute('''
-                    INSERT OR REPLACE INTO bookings (id, apartment_id, start_date, end_date, guest_name)
-                    VALUES (?, ?, ?, ?, ?)
-                ''', (row['id'], row['apartment_id'], row['start_date'], row['end_date'], row['guest_name']))
+                    INSERT OR REPLACE INTO bookings (id, apartment_id, start_date, end_date)
+                    VALUES (?, ?, ?, ?)
+                ''', (row['id'], row['apartment_id'], row['start_date'], row['end_date']))
 
             conn.commit()
             print("Bookings initialized successfully.")
@@ -58,17 +58,16 @@ def initialize_bookings(conn):
 
 
 def init_db():
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-
     if not os.path.exists(DATABASE):
+
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS bookings (
                 id TEXT PRIMARY KEY,
                 apartment_id TEXT NOT NULL,
                 start_date TEXT NOT NULL,
-                end_date TEXT NOT NULL,
-                guest_name TEXT NOT NULL
+                end_date TEXT NOT NULL
             )
         ''')
         cursor.execute('''
@@ -82,10 +81,10 @@ def init_db():
         ''')
         conn.commit()
 
-    initialize_apartments(conn)
-    initialize_bookings(conn)
+        initialize_apartments(conn)
+        initialize_bookings(conn)
 
-    conn.close()
+        conn.close()
 
 
 def search_apartments_in_db(date_from, date_to):
@@ -136,24 +135,24 @@ def remove_apartment_from_db(id):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT COUNT(*) FROM apartments WHERE id = ?', (id))
+    cursor.execute('SELECT COUNT(*) FROM apartments WHERE id = ?', (id,))
     count = cursor.fetchone()[0]
 
     if count > 0:
-        cursor.execute('DELETE FROM apartments WHERE id = ?', (id))
+        cursor.execute('DELETE FROM apartments WHERE id = ?', (id,))
         conn.commit()
 
     conn.close()
 
     
-def add_booking_to_db(id, apartment_id, start_date, end_date, guest_name):
+def add_booking_to_db(id, apartment_id, start_date, end_date):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     
     cursor.execute('''
-        INSERT OR REPLACE INTO bookings (id, apartment_id, start_date, end_date, guest_name)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (id, apartment_id, start_date, end_date, guest_name))
+        INSERT OR REPLACE INTO bookings (id, apartment_id, start_date, end_date)
+        VALUES (?, ?, ?, ?)
+    ''', (id, apartment_id, start_date, end_date))
 
     conn.commit()
     conn.close()
@@ -163,7 +162,7 @@ def change_booking_in_db(id, new_start_date, new_end_date):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT COUNT(*) FROM bookings WHERE id = ?', (id))
+    cursor.execute('SELECT COUNT(*) FROM bookings WHERE id = ?', (id,))
     count = cursor.fetchone()[0]
 
     if count > 0:
@@ -181,13 +180,13 @@ def remove_booking_from_db(id):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT COUNT(*) FROM bookings WHERE id = ?', (id))
+    cursor.execute('SELECT COUNT(*) FROM bookings WHERE id = ?', (id,))
     count = cursor.fetchone()[0]
 
     if count > 0:
         cursor.execute('''
             DELETE FROM bookings WHERE id = ?
-        ''', (id))
+        ''', (id,))
         conn.commit()
     
     conn.close()

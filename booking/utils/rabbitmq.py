@@ -40,13 +40,9 @@ def publish_message(event_type, data):
 
 def handle_apartment_event(event_type, data):
     apartment_id = data.get('apartment_id')
-    apartment_name = data.get('name')
-    apartment_address = data.get('address')
-    apartment_noise_level = data.get('noise_level')
-    apartment_floor = data.get('floor')
 
     if event_type == 'apartment_added':
-        add_apartment_to_db(apartment_id, apartment_name, apartment_address, apartment_noise_level, apartment_floor)
+        add_apartment_to_db(apartment_id)
         print(f"Apartment {apartment_id} added to local copy.", flush=True)
     elif event_type == 'apartment_removed':
         remove_apartment_from_db(apartment_id)
